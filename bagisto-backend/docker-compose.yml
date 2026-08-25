@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    image: ghcr.io/bagisto/bagisto:latest
+    container_name: bagisto_app
+    restart: always
+    environment:
+      APP_NAME: "IFPTIE AC Market Commerce Engine"
+      APP_ENV: production
+      APP_KEY: base64:R2VuZXJhdGVkS2V5Rm9yQmFnaXN0b0FwcExpdmUxMjM0NTY=
+      APP_DEBUG: "false"
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: bagisto
+      DB_USERNAME: bagisto_user
+      DB_PASSWORD: bagisto_password_123
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - bagisto_storage:/var/www/html/storage
+      - bagisto_public:/var/www/html/public
+
+  db:
+    image: mysql:8.0
+    container_name: bagisto_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: bagisto
+      MYSQL_USER: bagisto_user
+      MYSQL_PASSWORD: bagisto_password_123
+      MYSQL_ROOT_PASSWORD: root_password_123
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+  bagisto_storage:
+  bagisto_public:
